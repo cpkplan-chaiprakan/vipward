@@ -1,0 +1,10 @@
+node_modules
+dist
+legacy
+.git
+.gitignore
+*.log
+.env
+.env.local
+.dockerignore
+README.md

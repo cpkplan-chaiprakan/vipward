@@ -1,0 +1,16 @@
+# ให้ XAMPP / ngrok ที่พอร์ต 80 เสิร์ฟเว็บที่ build แล้ว ไม่ใช่ไฟล์ Vite ดิบ
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /vipward/
+
+  RewriteRule ^api/ - [L]
+  RewriteRule ^hosting/ - [L]
+
+  RewriteRule ^assets/(.*)$ hosting/assets/$1 [L]
+  RewriteRule ^favicon\.svg$ hosting/favicon.svg [L]
+
+  RewriteRule ^$ hosting/index.html [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . hosting/index.html [L]
+</IfModule>
