@@ -141,7 +141,7 @@ button {
 }
 
 .sidebar__brand {
-	padding: 2rem 1.5rem 1.5rem;
+	padding: 2.1rem 1.65rem 1.8rem;
 	border-bottom: 1px solid rgba(248, 250, 248, 0.1);
 }
 
@@ -158,47 +158,26 @@ button {
 	color: var(--terracotta);
 }
 
-/* Premium Care · Premium Service — caption แบบแบรนด์หรูใต้โลโก้ */
+/* Premium Care  Premium Service — บรรทัดเดียว ไม่มีเส้น ไม่มีจุด */
 .sidebar__motto {
-	position: relative;
 	display: flex;
 	align-items: center;
-	gap: 0.45rem;
-	margin: 0.55rem 0 0;
-	padding: 0.5rem 0 0;
+	flex-wrap: wrap;
+	gap: 0.45rem 0.7rem;
+	margin: 0.55rem 0 0.15rem;
+	padding: 0;
 	font-family: var(--font-heading);
 	font-size: 0.62rem;
 	font-weight: 600;
-	letter-spacing: 0.17em;
+	letter-spacing: 0.08em;
 	text-transform: uppercase;
-	white-space: nowrap;
-}
-
-.sidebar__motto::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 34px;
-	height: 2px;
-	border-radius: 2px;
-	background: linear-gradient(90deg, var(--terracotta), rgba(242, 122, 90, 0.15));
 }
 
 .sidebar__motto span {
-	background: linear-gradient(90deg, #f6ead0, #dcb476 55%, #f6ead0);
+	background: linear-gradient(90deg, #fff6e8, #e8c478 55%, #fff6e8);
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
-}
-
-.sidebar__motto i {
-	width: 3px;
-	height: 3px;
-	border-radius: 50%;
-	background: #dcb476;
-	opacity: 0.8;
-	flex-shrink: 0;
 }
 
 .sidebar__tagline {

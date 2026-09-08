@@ -24,7 +24,6 @@ export function Sidebar({ open, activeHref, onNavigate }: SidebarProps) {
         </div>
         <p className="sidebar__motto" aria-label="Premium Care, Premium Service">
           <span>Premium Care</span>
-          <i aria-hidden="true" />
           <span>Premium Service</span>
         </p>
         <div className="sidebar__tagline">{site.hospital.tagline}</div>
