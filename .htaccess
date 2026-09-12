@@ -6,11 +6,11 @@
   RewriteRule ^api/ - [L]
   RewriteRule ^hosting/ - [L]
 
-  RewriteRule ^assets/(.*)$ hosting/assets/$1 [L]
-  RewriteRule ^favicon\.svg$ hosting/favicon.svg [L]
+  RewriteRule ^assets/(.*)$ hosting/vipward/assets/$1 [L]
+  RewriteRule ^favicon\.svg$ hosting/vipward/favicon.svg [L]
 
-  RewriteRule ^$ hosting/index.html [L]
+  RewriteRule ^$ hosting/vipward/index.html [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . hosting/index.html [L]
+  RewriteRule . hosting/vipward/index.html [L]
 </IfModule>

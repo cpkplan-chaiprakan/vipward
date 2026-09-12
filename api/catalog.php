@@ -1,7 +1,7 @@
 <?php
 /**
  * GET /api/catalog.php
- * อ่านข้อมูลเว็บห้องพิเศษจากตาราง vipward_* ใน cpkhospita_cpkdoctor
+ * อ่านข้อมูลเว็บห้องพิเศษจากตาราง vipward_* ใน cpkhospita_project
  */
 require __DIR__ . '/bootstrap.php';
 
@@ -184,6 +184,6 @@ if ($result) {
 }
 
 $payload['source'] = 'mysql';
-$payload['note'] = 'อ่านจากตาราง vipward_* ใน cpkhospita_cpkdoctor';
+$payload['note'] = 'อ่านจากตาราง vipward_* ใน cpkhospita_project';
 
 vip_json($payload);

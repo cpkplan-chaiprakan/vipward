@@ -16,16 +16,17 @@ npm run build:hosting
 
 2. เปิด FileZilla ไปที่ `public_html`
 3. สร้างโฟลเดอร์ `vipward` (ถ้ายังไม่มี)
-4. อัปโหลด **ทุกอย่างในโฟลเดอร์ `hosting/`** เข้า `public_html/vipward`
-   - มี `index.html`, `assets/`, `api/`, `.htaccess`
-   - อย่าอัปโหลด `src`, `node_modules`, `docker`
+4. ใน FileZilla เปิดโฟลเดอร์ **`public_html`**
+5. ลากโฟลเดอร์ **`hosting/vipward`** ทั้งก้อนเข้า `public_html`
+   - อย่าวางข้างนอก `public_html` จะ 404
+   - อย่าโยนโฟลเดอร์โปรเจกต์จาก XAMPP ทั้งก้อน (`src`, `node_modules`, `docker` ไม่ต้องขึ้น)
 
 เว็บจะอยู่ที่ `https://www.cpkhospital.com/vipward/`
 
 ## นำเข้าฐานข้อมูลใน phpMyAdmin
 
 1. เข้า phpMyAdmin
-2. เลือกฐาน `cpkhospita_cpkdoctor`
+2. เลือกฐาน `cpkhospita_project`
 3. กด Import
 4. เลือกไฟล์ `sql/vipward.sql`
 5. กด Go

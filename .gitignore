@@ -2,6 +2,7 @@ node_modules
 dist
 .env
 .env.local
+api/config.local.php
 *.log
 hosting
 .DS_Store

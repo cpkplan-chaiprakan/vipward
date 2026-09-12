@@ -447,6 +447,63 @@ button {
 	gap: 1rem;
 }
 
+/* ตราโลโก้โรงพยาบาล มุมขวาบนของหน้าแรก */
+.hero__seal {
+	position: absolute;
+	top: clamp(1.5rem, 3.2vw, 2.75rem);
+	right: var(--section-pad);
+	z-index: 3;
+	display: block;
+	text-decoration: none;
+}
+
+.hero__seal-ring {
+	display: grid;
+	place-items: center;
+	width: clamp(112px, 11vw, 156px);
+	height: clamp(112px, 11vw, 156px);
+	border-radius: 50%;
+	background: #fff;
+	box-sizing: border-box;
+	box-shadow:
+		0 0 0 1.5px rgba(79, 183, 158, 0.32),
+		0 0 0 6px rgba(255, 255, 255, 0.85),
+		0 14px 34px rgba(31, 46, 74, 0.14);
+	transform: translateZ(0);
+	transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.hero__seal-disc {
+	position: relative;
+	display: block;
+	width: calc(100% - 6px);
+	height: calc(100% - 6px);
+	border-radius: 50%;
+	overflow: hidden;
+	background: #fff;
+	transform: translateZ(0);
+}
+
+/* โลโก้ในไฟล์ต้นฉบับอยู่ค่อนไปทางบน จึงขยับจุดกึ่งกลางให้ตราอยู่กลางวงพอดี */
+.hero__seal-disc img {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 124%;
+	height: 124%;
+	object-fit: cover;
+	transform: translate(-52%, -47%);
+	display: block;
+}
+
+.hero__seal:hover .hero__seal-ring {
+	transform: translateY(-3px);
+	box-shadow:
+		0 0 0 1px rgba(79, 183, 158, 0.45),
+		0 0 0 6px rgba(255, 255, 255, 0.95),
+		0 20px 40px rgba(31, 46, 74, 0.18);
+}
+
 /* Decorative scoops */
 .hero__deco {
 	position: absolute;
@@ -1770,6 +1827,20 @@ button {
 		right: -15%;
 		width: 220px;
 		height: 220px;
+	}
+
+	.hero__seal {
+		top: 1.15rem;
+		right: 1.15rem;
+	}
+
+	.hero__seal-ring {
+		width: 76px;
+		height: 76px;
+		box-shadow:
+			0 0 0 1.5px rgba(79, 183, 158, 0.32),
+			0 0 0 4px rgba(255, 255, 255, 0.85),
+			0 10px 24px rgba(31, 46, 74, 0.14);
 	}
 
 	.catering__grid {

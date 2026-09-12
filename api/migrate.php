@@ -1,6 +1,6 @@
 <?php
 /**
- * สร้างตาราง vipward_* ในฐาน cpkhospita_cpkdoctor ถ้ายังไม่มี
+ * สร้างตาราง vipward_* ในฐาน cpkhospita_project ถ้ายังไม่มี
  * และใส่ข้อมูลเริ่มต้นเฉพาะตารางที่ยังว่าง
  *
  * รันจาก Docker entrypoint หรือ: php api/migrate.php
@@ -329,5 +329,5 @@ foreach ($rights as $right) {
     vipward_exec($conn, 'UPDATE vipward_rights SET label = ?, is_filled = ?, is_reward = ? WHERE sort_order = ?', 'siii', $right);
 }
 
-echo "vipward migrate ok: tables ready in cpkhospita_cpkdoctor\n";
+echo 'vipward migrate ok: tables ready in ' . vipward_db_name() . "\n";
 

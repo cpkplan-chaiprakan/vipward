@@ -3,7 +3,7 @@
 -- นำเข้าด้วย phpMyAdmin
 -- =============================================================================
 -- วิธีใช้:
--- 1) เข้า phpMyAdmin แล้วเลือกฐานข้อมูล cpkhospita_cpkdoctor ทางซ้าย
+-- 1) เข้า phpMyAdmin แล้วเลือกฐานข้อมูล cpkhospita_project ทางซ้าย
 -- 2) กดแท็บ Import
 -- 3) เลือกไฟล์นี้ แล้วกด Go / Import
 --
@@ -195,109 +195,91 @@ INSERT IGNORE INTO vipward_amenities (id, tab_label, tab_icon, badge, season_lab
 ('family', 'ญาติผู้ดูแล', '♡', 'พื้นที่สำหรับครอบครัว', 'เฝ้าไข้ได้อย่างอบอุ่น', 'ญาติได้อยู่ใกล้ โดยไม่แออัด', 'มีที่นั่งพัก เก็บสัมภาระ และใช้ไฟฟ้าชาร์จอุปกรณ์ เพื่อให้ผู้ดูแลอยู่กับผู้ป่วยได้อย่างสบาย โดยไม่รบกวนการรักษา', '[{"icon":"▣","text":"โซฟาญาติ"},{"icon":"✧","text":"ที่เก็บของ"},{"icon":"♥","text":"เฝ้าไข้ได้"}]', 'family', 4, 1);
 
 INSERT INTO vipward_steps (step_num, title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT '1' AS step_num, 'ติดต่อเจ้าหน้าที่' AS title, 'สอบถามห้องว่างได้ที่เวชระเบียน หอผู้ป่วย หรือโทร 053-870-444 ได้ตลอด 24 ชั่วโมง' AS body_text, 1 AS sort_order, 1 AS is_active
-) AS seed
+SELECT '1' AS step_num, 'ติดต่อเจ้าหน้าที่' AS title, 'สอบถามห้องว่างได้ที่เวชระเบียน หอผู้ป่วย หรือโทร 053-870-444 ได้ตลอด 24 ชั่วโมง' AS body_text, 1 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_steps LIMIT 1);
 
 INSERT INTO vipward_steps (step_num, title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT '2', 'เลือกประเภทห้อง', 'เลือกห้องพิเศษทั่วไป หรือห้องพิเศษ VIP (ห้อง 6) ตามอาการ ความต้องการของครอบครัว และห้องที่ว่างในวันนั้น', 2, 1
-) AS seed
+SELECT '2' AS step_num, 'เลือกประเภทห้อง' AS title, 'เลือกห้องพิเศษทั่วไป หรือห้องพิเศษ VIP (ห้อง 6) ตามอาการ ความต้องการของครอบครัว และห้องที่ว่างในวันนั้น' AS body_text, 2 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_steps WHERE step_num = '2');
 
 INSERT INTO vipward_steps (step_num, title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT '3', 'ยืนยันสิทธิ์และค่าใช้จ่าย', 'เจ้าหน้าที่ช่วยตรวจสอบสิทธิ์บัตรทอง ประกันสังคม ข้าราชการ ประกันเอกชน หรือชำระเอง', 3, 1
-) AS seed
+SELECT '3' AS step_num, 'ยืนยันสิทธิ์และค่าใช้จ่าย' AS title, 'เจ้าหน้าที่ช่วยตรวจสอบสิทธิ์บัตรทอง ประกันสังคม ข้าราชการ ประกันเอกชน หรือชำระเอง' AS body_text, 3 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_steps WHERE step_num = '3');
 
 INSERT INTO vipward_steps (step_num, title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT '4', 'เข้าพักและรับการดูแล', 'ทีมแพทย์และพยาบาลรับเข้าหอผู้ป่วย จัดเตียง และดูแลอย่างต่อเนื่องจนกว่าจะจำหน่าย', 4, 1
-) AS seed
+SELECT '4' AS step_num, 'เข้าพักและรับการดูแล' AS title, 'ทีมแพทย์และพยาบาลรับเข้าหอผู้ป่วย จัดเตียง และดูแลอย่างต่อเนื่องจนกว่าจะจำหน่าย' AS body_text, 4 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_steps WHERE step_num = '4');
 
 INSERT INTO vipward_perks (title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'ทีมดูแลใกล้ชิด' AS title, 'แพทย์และพยาบาลหอผู้ป่วยพร้อมสังเกตอาการ และตอบคำถามครอบครัวได้ตลอดเวลา' AS body_text, 1 AS sort_order, 1 AS is_active
-) AS seed
+SELECT 'ทีมดูแลใกล้ชิด' AS title, 'แพทย์และพยาบาลหอผู้ป่วยพร้อมสังเกตอาการ และตอบคำถามครอบครัวได้ตลอดเวลา' AS body_text, 1 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_perks LIMIT 1);
 
 INSERT INTO vipward_perks (title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'สะอาด เงียบ เป็นระเบียบ', 'ห้องพิเศษเน้นความสงบและความสะอาด เพื่อให้ผู้ป่วยได้พักฟื้นอย่างมีคุณภาพ', 2, 1
-) AS seed
+SELECT 'สะอาด เงียบ เป็นระเบียบ' AS title, 'ห้องพิเศษเน้นความสงบและความสะอาด เพื่อให้ผู้ป่วยได้พักฟื้นอย่างมีคุณภาพ' AS body_text, 2 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_perks WHERE title = 'สะอาด เงียบ เป็นระเบียบ');
 
 INSERT INTO vipward_perks (title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'ใช้สิทธิ์การรักษาได้', 'สอบถามการใช้สิทธิ์บัตรทอง ประกันสังคม ข้าราชการ ประกันเอกชน หรือชำระเองได้ที่เจ้าหน้าที่', 3, 1
-) AS seed
+SELECT 'ใช้สิทธิ์การรักษาได้' AS title, 'สอบถามการใช้สิทธิ์บัตรทอง ประกันสังคม ข้าราชการ ประกันเอกชน หรือชำระเองได้ที่เจ้าหน้าที่' AS body_text, 3 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_perks WHERE title = 'ใช้สิทธิ์การรักษาได้');
 
 INSERT INTO vipward_perks (title, body_text, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'สอบถามห้องว่าง 24 ชม.', 'โทร 053-870-444 หรือติดต่อหอผู้ป่วยเมื่อมีแผนเข้าพักหรือย้ายจากห้องสามัญ', 4, 1
-) AS seed
+SELECT 'สอบถามห้องว่าง 24 ชม.' AS title, 'โทร 053-870-444 หรือติดต่อหอผู้ป่วยเมื่อมีแผนเข้าพักหรือย้ายจากห้องสามัญ' AS body_text, 4 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_perks WHERE title = 'สอบถามห้องว่าง 24 ชม.');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'บัตรทอง' AS label, 1 AS is_filled, 0 AS is_reward, 1 AS sort_order, 1 AS is_active
-) AS seed
+SELECT 'บัตรทอง' AS label, 1 AS is_filled, 0 AS is_reward, 1 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights LIMIT 1);
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'ปกส.', 1, 0, 2, 1
-) AS seed
+SELECT 'ปกส.' AS label, 1 AS is_filled, 0 AS is_reward, 2 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'ปกส.');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'ข้าราชการ', 1, 0, 3, 1
-) AS seed
+SELECT 'ข้าราชการ' AS label, 1 AS is_filled, 0 AS is_reward, 3 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'ข้าราชการ');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'ประกัน', 1, 0, 4, 1
-) AS seed
+SELECT 'ประกัน' AS label, 1 AS is_filled, 0 AS is_reward, 4 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'ประกัน');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'จ่ายเอง', 1, 1, 5, 1
-) AS seed
+SELECT 'จ่ายเอง' AS label, 1 AS is_filled, 1 AS is_reward, 5 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'จ่ายเอง');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'OPD', 1, 0, 6, 1
-) AS seed
+SELECT 'OPD' AS label, 1 AS is_filled, 0 AS is_reward, 6 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'OPD');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'IPD', 1, 0, 7, 1
-) AS seed
+SELECT 'IPD' AS label, 1 AS is_filled, 0 AS is_reward, 7 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'IPD');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'ฉุกเฉิน', 0, 0, 8, 1
-) AS seed
+SELECT 'ฉุกเฉิน' AS label, 0 AS is_filled, 0 AS is_reward, 8 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'ฉุกเฉิน');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'นัดหมาย', 0, 0, 9, 1
-) AS seed
+SELECT 'นัดหมาย' AS label, 0 AS is_filled, 0 AS is_reward, 9 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'นัดหมาย');
 
 INSERT INTO vipward_rights (label, is_filled, is_reward, sort_order, is_active)
-SELECT * FROM (
-  SELECT 'สอบถาม', 0, 1, 10, 1
-) AS seed
+SELECT 'สอบถาม' AS label, 0 AS is_filled, 1 AS is_reward, 10 AS sort_order, 1 AS is_active
+FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM vipward_rights WHERE label = 'สอบถาม');

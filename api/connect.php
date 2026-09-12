@@ -1,66 +1,99 @@
 <?php
 /**
- * เชื่อม MySQL ฐาน cpkhospita_cpkdoctor
+ * เชื่อม MySQL ฐาน cpkhospita_project
  *
  * ลำดับการอ่านค่า:
  *   1) ตัวแปรแวดล้อม Docker (DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)
- *   2) connect.php ของ cpkdashboard ถ้าหาไฟล์เจอ
+ *   2) api/config.local.php (ไฟล์นี้ไม่ขึ้น git และเปิดจากเบราว์เซอร์ไม่ได้)
+ *
+ * ตารางของงานนี้ขึ้นต้น vipward_ ทั้งหมด จะไม่ไปยุ่งตารางอื่นในฐานเดียวกัน
  */
 declare(strict_types=1);
 
-function vipward_dashboard_connect_path(): ?string
+function vipward_db_config(): array
 {
-    $candidates = [
-        dirname(__DIR__, 2) . '/boot/cpkdashboard/connect.php',
-        dirname(__DIR__, 2) . '/cpkdashboard/connect.php',
-        dirname(__DIR__, 3) . '/cpkdashboard/connect.php',
-        '/home/cpkhospita/web/cpkhospital.com/public_html/cpkdashboard/connect.php',
+    static $cached = null;
+    if (is_array($cached)) {
+        return $cached;
+    }
+
+    $config = [
+        'host' => 'localhost',
+        'user' => 'cpkhospita_project',
+        'pass' => '',
+        'name' => 'cpkhospita_project',
+        'port' => 3306,
+        'charset' => 'utf8mb4',
     ];
 
-    foreach ($candidates as $path) {
-        $real = realpath($path);
-        if ($real && is_file($real)) {
-            return $real;
+    $localFile = __DIR__ . '/config.local.php';
+    if (is_file($localFile)) {
+        $local = require $localFile;
+        if (is_array($local)) {
+            $config = array_merge($config, $local);
         }
     }
 
-    return null;
+    $envMap = [
+        'host' => 'DB_HOST',
+        'user' => 'DB_USER',
+        'pass' => 'DB_PASS',
+        'name' => 'DB_NAME',
+        'charset' => 'DB_CHARSET',
+    ];
+    foreach ($envMap as $key => $env) {
+        $value = getenv($env);
+        if ($value !== false && $value !== '') {
+            $config[$key] = $value;
+        }
+    }
+
+    $port = getenv('DB_PORT');
+    if ($port !== false && $port !== '') {
+        $config['port'] = intval($port);
+    }
+
+    $cached = $config;
+    return $cached;
+}
+
+function vipward_db_name(): string
+{
+    return (string) vipward_db_config()['name'];
 }
 
 function vipward_connect(): mysqli
 {
-    $host = getenv('DB_HOST') ?: '';
-    $user = getenv('DB_USER') ?: '';
-    $pass = getenv('DB_PASS') ?: '';
-    $name = getenv('DB_NAME') ?: 'cpkhospita_cpkdoctor';
-    $port = intval(getenv('DB_PORT') ?: 3306);
-    $charset = getenv('DB_CHARSET') ?: 'utf8mb4';
+    $cfg = vipward_db_config();
+    $host = (string) $cfg['host'];
+    $user = (string) $cfg['user'];
+    $pass = (string) $cfg['pass'];
+    $name = (string) $cfg['name'];
+    $port = intval($cfg['port']);
+    $charset = (string) $cfg['charset'];
 
-    if ($host !== '' && $user !== '') {
-        $conn = mysqli_init();
-        if (!$conn) {
-            throw new RuntimeException('mysqli_init failed');
-        }
-        mysqli_options($conn, MYSQLI_OPT_CONNECT_TIMEOUT, 10);
-        if (!mysqli_real_connect($conn, $host, $user, $pass, $name, $port)) {
-            throw new RuntimeException('Database connect failed');
-        }
-        $conn->set_charset($charset);
-        $conn->query("SET time_zone = '+07:00'");
-        return $conn;
+    if ($host === '' || $user === '' || $pass === '') {
+        throw new RuntimeException('Database config is incomplete');
     }
 
-    $dashboard = vipward_dashboard_connect_path();
-    if ($dashboard !== null) {
-        if (!defined('ALLOW_ACCESS')) {
-            define('ALLOW_ACCESS', true);
-        }
-        require $dashboard;
-        if (isset($conn) && $conn instanceof mysqli && !$conn->connect_error) {
-            $conn->query("SET time_zone = '+07:00'");
-            return $conn;
-        }
+    $conn = mysqli_init();
+    if (!$conn) {
+        throw new RuntimeException('mysqli_init failed');
     }
 
-    throw new RuntimeException('No database connection available');
+    mysqli_options($conn, MYSQLI_OPT_CONNECT_TIMEOUT, 8);
+    mysqli_options($conn, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1);
+
+    if (!@mysqli_real_connect($conn, $host, $user, $pass, $name, $port)) {
+        throw new RuntimeException('Database connect failed');
+    }
+
+    if (!$conn->set_charset($charset)) {
+        throw new RuntimeException('Database charset failed');
+    }
+
+    $conn->query("SET time_zone = '+07:00'");
+    $conn->query("SET sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION'");
+
+    return $conn;
 }

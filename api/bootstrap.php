@@ -39,7 +39,9 @@ $dbNote = 'ยังไม่เชื่อมฐานข้อมูล ใ�
 try {
     $conn = vipward_connect();
     $dbReady = true;
-    $dbNote = 'เชื่อม cpkhospita_cpkdoctor แล้ว';
+    $currentDb = $conn->query('SELECT DATABASE()');
+    $dbName = $currentDb ? ($currentDb->fetch_row()[0] ?? '') : '';
+    $dbNote = $dbName !== '' ? 'เชื่อม ' . $dbName . ' แล้ว' : 'เชื่อมฐานข้อมูลแล้ว';
 } catch (Throwable $e) {
     error_log('[vipward] DB bootstrap: ' . $e->getMessage());
     $conn = null;

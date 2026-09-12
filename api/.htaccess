@@ -1,6 +1,15 @@
 Options -Indexes
 
-<FilesMatch "^(migrate|connect|bootstrap)\.php$">
+<FilesMatch "^(migrate|connect|bootstrap|config(\.local)?)\.php$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(env|log|sql|bak|old)$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>

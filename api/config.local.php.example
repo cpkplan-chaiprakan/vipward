@@ -1,0 +1,11 @@
+<?php
+declare(strict_types=1);
+
+return [
+    'host' => 'localhost',
+    'user' => 'cpkhospita_project',
+    'pass' => '',
+    'name' => 'cpkhospita_project',
+    'port' => 3306,
+    'charset' => 'utf8mb4',
+];
