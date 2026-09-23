@@ -1,4 +1,4 @@
-import { CheckCircle2, Copy } from 'lucide-react'
+import { CalendarDays, Check, CheckCircle2, Copy, IdCard, Phone, UtensilsCrossed } from 'lucide-react'
 import { type FormEvent, useEffect, useMemo, useState } from 'react'
 import { ThaiDatePicker } from '../../components/ThaiDatePicker'
 import { site } from '../../data/site'
@@ -40,6 +40,7 @@ export function HealthcheckRequestForm({ packages, selectedId, onSelect, onSubmi
   const [result, setResult] = useState<HealthcheckSubmitResult | null>(null)
 
   const packageId = selectedId ?? packages[0]?.id ?? 0
+  const selectedPackage = packages.find((item) => item.id === packageId) ?? null
 
   useEffect(() => {
     if (selectedId !== null) setResult(null)
@@ -159,6 +160,7 @@ export function HealthcheckRequestForm({ packages, selectedId, onSelect, onSubmi
           </div>
         </div>
       ) : (
+        <div className="hc-request__layout">
         <form className="hc-form reveal" onSubmit={handleSubmit} noValidate>
           <fieldset className="hc-form__group">
             <legend>1. เลือกแพ็กเกจ</legend>
@@ -289,6 +291,59 @@ export function HealthcheckRequestForm({ packages, selectedId, onSelect, onSubmi
             <span>หรือโทร <a href={site.hospital.phoneHref}>053-870-444</a></span>
           </div>
         </form>
+
+        <aside className="hc-summary reveal" aria-label="สรุปคำขอ">
+          <div className="hc-summary__card">
+            <span className="hc-summary__label">แพ็กเกจที่เลือก</span>
+            {selectedPackage ? (
+              <>
+                <h3 className="hc-summary__name">{selectedPackage.name}</h3>
+                <p className="hc-summary__price">{selectedPackage.price}</p>
+                {selectedPackage.description && <p className="hc-summary__desc">{selectedPackage.description}</p>}
+                {selectedPackage.items.length > 0 && (
+                  <ul className="hc-summary__items">
+                    {selectedPackage.items.map((item) => (
+                      <li key={item}>
+                        <Check size={15} strokeWidth={2.4} aria-hidden="true" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            ) : (
+              <p className="hc-summary__desc">ยังไม่ได้เลือกแพ็กเกจ</p>
+            )}
+            <div className="hc-summary__date">
+              <CalendarDays size={18} aria-hidden="true" />
+              <div>
+                <span>วันที่ขอ</span>
+                <strong>
+                  {formatThaiDateFull(preferredDate)} · {periodLabel[period]}
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          <div className="hc-summary__tips">
+            <h4>เตรียมตัวก่อนมาตรวจ</h4>
+            <ul>
+              <li>
+                <UtensilsCrossed size={16} aria-hidden="true" />
+                ถ้ามีตรวจน้ำตาลหรือไขมัน งดอาหารและเครื่องดื่ม (ยกเว้นน้ำเปล่า) 8 ชั่วโมง
+              </li>
+              <li>
+                <IdCard size={16} aria-hidden="true" />
+                นำบัตรประชาชนและรหัสคำขอมาด้วย
+              </li>
+              <li>
+                <Phone size={16} aria-hidden="true" />
+                เจ้าหน้าที่จะโทรยืนยันวันนัดจากเบอร์ <a href={site.hospital.phoneHref}>053-870-444</a>
+              </li>
+            </ul>
+          </div>
+        </aside>
+        </div>
       )}
     </section>
   )

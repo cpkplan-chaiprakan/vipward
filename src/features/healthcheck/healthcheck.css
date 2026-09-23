@@ -277,6 +277,162 @@ html[data-service='healthcheck'] .builder__preview-scoop2 {
 	border: 1px solid rgba(31, 46, 74, 0.05);
 }
 
+.hc-request__layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+	gap: var(--gap);
+	align-items: start;
+}
+
+.hc-request__layout .hc-form {
+	max-width: none;
+}
+
+.hc-summary {
+	position: sticky;
+	top: 1.5rem;
+	display: grid;
+	gap: 1rem;
+}
+
+.hc-summary__card {
+	position: relative;
+	overflow: hidden;
+	padding: 1.6rem 1.5rem 1.4rem;
+	border-radius: var(--radius-xl);
+	background: linear-gradient(160deg, #1b7fc4 0%, #0f6aa8 100%);
+	color: #fff;
+	box-shadow: 0 18px 40px rgba(15, 106, 168, 0.25);
+}
+
+.hc-summary__card::after {
+	content: '';
+	position: absolute;
+	right: -60px;
+	top: -60px;
+	width: 180px;
+	height: 180px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.08);
+	pointer-events: none;
+}
+
+.hc-summary__label {
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.hc-summary__name {
+	margin-top: 0.35rem;
+	font-family: var(--font-body);
+	font-size: 1.25rem;
+	font-weight: 700;
+	line-height: 1.35;
+	color: #fff;
+}
+
+.hc-summary__price {
+	margin-top: 0.15rem;
+	font-weight: 700;
+	color: #a9dbf4;
+}
+
+.hc-summary__desc {
+	margin-top: 0.6rem;
+	font-size: 0.86rem;
+	line-height: 1.6;
+	color: rgba(255, 255, 255, 0.85);
+}
+
+.hc-summary__items {
+	display: grid;
+	gap: 0.45rem;
+	margin: 1rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hc-summary__items li {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+	font-size: 0.86rem;
+	line-height: 1.5;
+}
+
+.hc-summary__items svg {
+	flex-shrink: 0;
+	margin-top: 0.2rem;
+	padding: 2px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.18);
+}
+
+.hc-summary__date {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: 1.2rem;
+	padding: 0.8rem 0.95rem;
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.14);
+}
+
+.hc-summary__date span {
+	display: block;
+	font-size: 0.72rem;
+	color: rgba(255, 255, 255, 0.72);
+}
+
+.hc-summary__date strong {
+	font-size: 0.9rem;
+}
+
+.hc-summary__tips {
+	padding: 1.3rem 1.4rem;
+	border-radius: var(--radius-lg);
+	background: #fff;
+	border: 1px solid rgba(31, 46, 74, 0.06);
+	box-shadow: var(--shadow-card);
+}
+
+.hc-summary__tips h4 {
+	margin-bottom: 0.75rem;
+	font-family: var(--font-body);
+	font-size: 0.95rem;
+	color: var(--navy);
+}
+
+.hc-summary__tips ul {
+	display: grid;
+	gap: 0.65rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hc-summary__tips li {
+	display: flex;
+	gap: 0.6rem;
+	font-size: 0.84rem;
+	line-height: 1.55;
+	color: var(--navy-light);
+}
+
+.hc-summary__tips svg {
+	flex-shrink: 0;
+	margin-top: 0.15rem;
+	color: var(--terracotta);
+}
+
+.hc-summary__tips a {
+	color: var(--terracotta-dark);
+	font-weight: 700;
+}
+
 .hc-form__group {
 	border: 0;
 	padding: 0;
@@ -299,15 +455,16 @@ html[data-service='healthcheck'] .builder__preview-scoop2 {
 
 .hc-choice-list {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-	gap: 0.65rem;
+	gap: 0.6rem;
 }
 
 .hc-choice {
 	position: relative;
 	display: flex;
-	flex-direction: column;
-	gap: 0.1rem;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 0.25rem 1rem;
 	padding: 0.85rem 1rem 0.85rem 2.6rem;
 	border-radius: 14px;
 	border: 1.5px solid rgba(31, 46, 74, 0.1);
@@ -320,7 +477,8 @@ html[data-service='healthcheck'] .builder__preview-scoop2 {
 	content: '';
 	position: absolute;
 	left: 1rem;
-	top: 1.05rem;
+	top: 50%;
+	margin-top: -8px;
 	width: 16px;
 	height: 16px;
 	border-radius: 50%;
@@ -698,6 +856,17 @@ html[data-service='healthcheck'] .builder__preview-scoop2 {
 .hc-badge--rejected { background: #fdecea; color: #b0483a; }
 .hc-badge--completed { background: #eceff5; color: #3d4a63; }
 .hc-badge--cancelled { background: #f1f1f1; color: #7a7a7a; }
+
+@media (max-width: 1100px) {
+	.hc-request__layout {
+		grid-template-columns: 1fr;
+	}
+
+	.hc-summary {
+		position: static;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	}
+}
 
 @media (max-width: 1024px) {
 	.hc-status__layout {
