@@ -1,12 +1,17 @@
 import {
   Bath,
   BedDouble,
+  CalendarCheck,
+  ClipboardPlus,
   Gem,
   Heart,
+  HeartPulse,
   ListChecks,
+  SearchCheck,
   ShieldCheck,
   Sofa,
   Sparkles,
+  Stethoscope,
   Target,
   type LucideIcon,
 } from 'lucide-react'
@@ -24,11 +29,16 @@ const navIcons: Record<string, LucideIcon> = {
   packages: Gem,
   amenities: Sparkles,
   why: Heart,
+  checkup: Stethoscope,
+  request: ClipboardPlus,
+  status: SearchCheck,
+  appointment: CalendarCheck,
+  pulse: HeartPulse,
 }
 
-export function NavIcon({ name }: { name: string }) {
+export function NavIcon({ name, size = iconProps.size }: { name: string; size?: number }) {
   const Icon = navIcons[name] ?? Target
-  return <Icon {...iconProps} />
+  return <Icon {...iconProps} size={size} />
 }
 
 const tabIcons: Record<string, LucideIcon> = {

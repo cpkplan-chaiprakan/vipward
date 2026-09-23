@@ -329,5 +329,8 @@ foreach ($rights as $right) {
     vipward_exec($conn, 'UPDATE vipward_rights SET label = ?, is_filled = ?, is_reward = ? WHERE sort_order = ?', 'siii', $right);
 }
 
+require_once __DIR__ . '/healthcheck/common.php';
+healthcheck_ensure_tables($conn);
+
 echo 'vipward migrate ok: tables ready in ' . vipward_db_name() . "\n";
 

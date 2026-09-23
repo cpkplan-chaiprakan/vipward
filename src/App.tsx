@@ -9,6 +9,7 @@ import { RoomTypes } from './components/RoomTypes'
 import { Sidebar } from './components/Sidebar'
 import { WhyVip } from './components/WhyVip'
 import { SiteProvider, useSite } from './context/SiteContext'
+import { HealthcheckApp } from './features/healthcheck/HealthcheckApp'
 import { useActiveSection } from './hooks/useActiveSection'
 import { useReveal } from './hooks/useReveal'
 
@@ -49,6 +50,10 @@ function AppShell() {
       <Sidebar
         open={menuOpen}
         activeHref={`#${activeId}`}
+        service="vipward"
+        nav={site.nav}
+        tagline={site.hospital.tagline}
+        hours={site.hospital.hours}
         onNavigate={() => {
           if (window.innerWidth <= 1024) closeMenu()
         }}
@@ -68,10 +73,18 @@ function AppShell() {
 }
 
 export default function App() {
-  const isAdmin = /\/admin\/?$/.test(window.location.pathname)
+  const path = window.location.pathname
+  const isAdmin = /\/admin\/?$/.test(path)
+  const isHealthcheck = /\/checkup\/?$/.test(path)
+
+  document.documentElement.dataset.service = isHealthcheck ? 'healthcheck' : 'vipward'
 
   if (isAdmin) {
     return <AdminPage />
+  }
+
+  if (isHealthcheck) {
+    return <HealthcheckApp />
   }
 
   return (

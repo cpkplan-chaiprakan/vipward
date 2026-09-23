@@ -1,13 +1,19 @@
 import { NavIcon } from './Icons'
+import { ServiceSwitch, type ServiceKey } from './ServiceSwitch'
 import { useSite } from '../context/SiteContext'
+import type { NavItem } from '../types'
 
 type SidebarProps = {
   open: boolean
   activeHref: string
   onNavigate: () => void
+  service: ServiceKey
+  nav: NavItem[]
+  tagline: string
+  hours: string[]
 }
 
-export function Sidebar({ open, activeHref, onNavigate }: SidebarProps) {
+export function Sidebar({ open, activeHref, onNavigate, service, nav, tagline, hours }: SidebarProps) {
   const site = useSite()
 
   return (
@@ -26,12 +32,13 @@ export function Sidebar({ open, activeHref, onNavigate }: SidebarProps) {
           <span>Premium Care</span>
           <span>Premium Service</span>
         </p>
-        <div className="sidebar__tagline">{site.hospital.tagline}</div>
+        <ServiceSwitch current={service} />
+        <div className="sidebar__tagline">{tagline}</div>
       </div>
 
       <nav className="sidebar__nav">
         <ul>
-          {site.nav.map((item) => (
+          {nav.map((item) => (
             <li key={item.href}>
               <a
                 href={item.href}
@@ -52,9 +59,9 @@ export function Sidebar({ open, activeHref, onNavigate }: SidebarProps) {
         <div className="sidebar__hours">
           <strong>{site.hospital.name}</strong>
           <br />
-          {site.hospital.hours[0]}
+          {hours[0]}
           <br />
-          {site.hospital.hours[1]}
+          {hours[1]}
         </div>
       </div>
     </aside>

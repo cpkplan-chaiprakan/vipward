@@ -12,6 +12,7 @@ import {
   RefreshCw,
   ShieldCheck,
   Sparkles,
+  Stethoscope,
   Trash2,
   Wrench,
 } from 'lucide-react'
@@ -45,6 +46,15 @@ import {
 } from '../lib/thaiDate'
 import { ThaiDatePicker } from './ThaiDatePicker'
 import { AdminStats } from './AdminStats'
+import { AdminHealthcheck } from '../features/admin/healthcheck/AdminHealthcheck'
+import { fetchAdminHealthcheckRequests } from '../features/healthcheck/api'
+import type { HealthcheckCounts } from '../features/healthcheck/types'
+
+type AdminTab = 'vipward' | 'healthcheck'
+
+function tabFromHash(): AdminTab {
+  return window.location.hash === '#healthcheck' ? 'healthcheck' : 'vipward'
+}
 
 const statuses: { value: RoomStatus; icon: typeof CheckCircle2 }[] = [
   { value: 'available', icon: CheckCircle2 },
@@ -486,6 +496,31 @@ export function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [stats, setStats] = useState<WardStats | null>(null)
+  const [tab, setTab] = useState<AdminTab>(tabFromHash)
+  const [pendingCheckups, setPendingCheckups] = useState(0)
+
+  useEffect(() => {
+    document.documentElement.dataset.service = tab
+    const hash = tab === 'healthcheck' ? '#healthcheck' : ''
+    if (window.location.hash !== hash) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`)
+    }
+  }, [tab])
+
+  const handleHealthcheckCounts = useCallback((counts: HealthcheckCounts) => {
+    setPendingCheckups(counts.pending)
+  }, [])
+
+  useEffect(() => {
+    if (!session?.authenticated || tab !== 'vipward') return
+    const check = () =>
+      fetchAdminHealthcheckRequests('pending')
+        .then((data) => setPendingCheckups(data.counts.pending))
+        .catch(() => undefined)
+    void check()
+    const timer = window.setInterval(check, 60_000)
+    return () => window.clearInterval(timer)
+  }, [session?.authenticated, tab])
 
   useEffect(() => {
     fetchAdminSession()
@@ -516,11 +551,11 @@ export function AdminPage() {
   }, [date, session?.authenticated])
 
   useEffect(() => {
-    if (!session?.authenticated) return
+    if (!session?.authenticated || tab !== 'vipward') return
     void loadRooms()
     const timer = window.setInterval(() => void loadRooms(true), 30_000)
     return () => window.clearInterval(timer)
-  }, [loadRooms, session?.authenticated])
+  }, [loadRooms, session?.authenticated, tab])
 
   const counts = useMemo(() => {
     const result = Object.fromEntries(statuses.map(({ value }) => [value, 0])) as Record<RoomStatus, number>
@@ -605,8 +640,8 @@ export function AdminPage() {
         <div className="admin-header__brand">
           <div className="admin-header__logo">CPK</div>
           <div>
-            <span>VIP WARD MONITOR</span>
-            <strong>ระบบติดตามห้องพิเศษ</strong>
+            <span>{tab === 'healthcheck' ? 'HEALTH CHECK DESK' : 'VIP WARD MONITOR'}</span>
+            <strong>{tab === 'healthcheck' ? 'ระบบนัดตรวจสุขภาพ' : 'ระบบติดตามห้องพิเศษ'}</strong>
           </div>
         </div>
         <div className="admin-header__user">
@@ -620,15 +655,52 @@ export function AdminPage() {
       </header>
 
       <div className="admin-main">
+        <nav className="admin-service-tabs" role="tablist" aria-label="เลือกระบบ">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'vipward'}
+            className={tab === 'vipward' ? 'is-active' : undefined}
+            onClick={() => setTab('vipward')}
+          >
+            <BedDouble size={17} /> ห้องพิเศษ
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'healthcheck'}
+            className={tab === 'healthcheck' ? 'is-active' : undefined}
+            onClick={() => setTab('healthcheck')}
+          >
+            <Stethoscope size={17} /> ตรวจสุขภาพ
+            {pendingCheckups > 0 ? (
+              <span className="admin-service-tabs__badge" title="คำขอรอยืนยัน">{pendingCheckups}</span>
+            ) : null}
+          </button>
+        </nav>
+
         <section className="admin-welcome">
           <div>
             <span className="admin-kicker">NURSE DASHBOARD</span>
             <h1>สวัสดีค่ะ ทีมพยาบาล</h1>
-            <p>ตรวจสอบและอัปเดตสถานะห้อง กดที่การ์ดห้องเพื่อแก้ไข</p>
+            <p>
+              {tab === 'healthcheck'
+                ? 'ดูคำขอตรวจสุขภาพจากคนไข้ ยืนยันหรือนัดวันใหม่ แล้วโทรแจ้งคนไข้'
+                : 'ตรวจสอบและอัปเดตสถานะห้อง กดที่การ์ดห้องเพื่อแก้ไข'}
+            </p>
           </div>
-          <a href="../" className="admin-public-link">ดูหน้าเว็บไซต์</a>
+          <a
+            href={`${import.meta.env.BASE_URL}${tab === 'healthcheck' ? 'checkup' : ''}`}
+            className="admin-public-link"
+          >
+            ดูหน้าเว็บไซต์
+          </a>
         </section>
 
+        {tab === 'healthcheck' ? (
+          <AdminHealthcheck onCounts={handleHealthcheckCounts} />
+        ) : (
+        <>
         <section className="admin-datebar">
           <button type="button" aria-label="วันก่อนหน้า" onClick={() => setDate((current) => shiftDays(current, -1))}><ChevronLeft /></button>
           <ThaiDatePicker value={date} onChange={setDate} label="กำลังดูข้อมูลวันที่" variant="bar" />
@@ -693,6 +765,8 @@ export function AdminPage() {
         </section>
 
         <AdminStats stats={stats} loading={loading} />
+        </>
+        )}
       </div>
 
       {selectedRoom ? (
